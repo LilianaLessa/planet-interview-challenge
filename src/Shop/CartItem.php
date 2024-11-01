@@ -42,7 +42,7 @@ class CartItem extends Exception
 
 		public function is_available(): ?bool
 		{
-		    return $this->expires < time();
+            return $this->expires <= time();
 		}
 
        /**
