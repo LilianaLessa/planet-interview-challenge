@@ -11,7 +11,8 @@
         "codeception/module-phpbrowser": "^2.0",
         "mustangostang/spyc": "^0.6.3",
         "smarty/smarty": "^5.4",
-        "wp-pay-gateways/abnamro-internetkassa": "*"
+        "wp-pay-gateways/abnamro-internetkassa": "*",
+        "ext-json": "*"
     },
     "license": "MIT",
     "autoload": {
