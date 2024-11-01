@@ -2,11 +2,9 @@
 
 namespace Planet\InterviewChallenge\Shop;
 
-use Exception;
-use Throwable;
 use Planet\InterviewChallenge\App;
 
-class CartItem extends Exception
+class CartItem
 {
 		const MODE_NO_LIMIT = 0;
 
@@ -15,8 +13,6 @@ class CartItem extends Exception
 		const MODE_MINUTE = 10;
 
 		const MODE_SECONDS = 1000;
-
-		protected bool $smartySetup = false;
 
 		private int $expires;
 
@@ -30,6 +26,7 @@ class CartItem extends Exception
 		        break;
 		    case self::MODE_HOUR:
 		        $this->expires = strtotime('+1 hour');
+                break;
 		    case self::MODE_MINUTE:
 		        $this->expires = strtotime('+' . $modifier . ' minutes');
 		        break;
@@ -57,9 +54,6 @@ class CartItem extends Exception
 		}
 
 		public function display(): string
-
-
-
 		{
 		    App::smarty()->assign('price', $this->price);
 		    App::smarty()->assign('expires', $this->expires);
