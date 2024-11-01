@@ -25,7 +25,7 @@ class Cart
 
     private function valueToMode($value, &$modifier): int {
 
-        if ($newValue = $value) {
+        if ($value) {
             if ($value === 'never') {
                 return CartItem::MODE_NO_LIMIT;
             }
@@ -37,10 +37,10 @@ class Cart
         }
     }
 
-    public function addItem(CartItem $cartItem): ?bool
+    public function addItem(CartItem $cartItem): bool
     {
         try {
-            $cartItem->is_available();
+            $cartItem->isAvailable();
             $this->items[] = $cartItem;
             return true;
         } catch (Throwable|Exception $e) {

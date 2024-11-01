@@ -24,7 +24,7 @@ class CartItem
         $this->price = $price;
     }
 
-    public function is_available(): bool
+    public function isAvailable(): bool
     {
         return $this->expires <= time();
     }
