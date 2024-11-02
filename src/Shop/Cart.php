@@ -2,11 +2,7 @@
 
 namespace Planet\InterviewChallenge\Shop;
 
-use Exception;
-use Throwable;
 use Planet\InterviewChallenge\App;
-
-require_once(__DIR__.'/CartItem.php');
 
 class Cart
 {
@@ -18,43 +14,14 @@ class Cart
 
         $params = json_decode($_GET['items'] ?? '[]');
 
-        while ($item = each($params)) {
-            $this->addItem(new CartItem((int)$item['value']->price, $this->valueToMode($item['value']->expires, $modifier), $modifier));
+        foreach ($params as $item) {
+            $this->addItem(new CartItem((int)$item->price, $this->valueToMode($item->expires, $modifier), $modifier));
         }
     }
 
-    private function valueToMode($value, &$modifier): int {
-
-        if ($value) {
-            if ($value === 'never') {
-                return CartItem::MODE_NO_LIMIT;
-            }
-
-            if ($value === '60min') {
-                $modifier = 60;
-                return CartItem::MODE_SECONDS;
-            }
-        }
-    }
-
-    public function addItem(CartItem $cartItem): bool
+    public function addItem(CartItem $cartItem): void
     {
-        try {
-            $cartItem->isAvailable();
-            $this->items[] = $cartItem;
-            return true;
-        } catch (Throwable|Exception $e) {
-            throw $e;
-        }
-    }
-
-    public function getItems(): array
-    {
-        return $this->items;
-    }
-
-    public function clear(): void {
-        unset($this->items);
+        $this->items[] = $cartItem;
     }
 
     public function display(): string
@@ -72,5 +39,19 @@ class Cart
         }
         $objectStates = substr($objectStates, 0, -1);
         return $objectStates . ']';
+    }
+
+    private function valueToMode($value, &$modifier): int {
+
+        if ($value) {
+            if ($value === 'never') {
+                return CartItem::MODE_NO_LIMIT;
+            }
+
+            if ($value === '60min') {
+                $modifier = 60;
+                return CartItem::MODE_SECONDS;
+            }
+        }
     }
 }
