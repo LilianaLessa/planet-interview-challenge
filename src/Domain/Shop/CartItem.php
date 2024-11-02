@@ -6,21 +6,13 @@ use stdClass;
 
 class CartItem implements \JsonSerializable
 {
-    const MODE_NO_LIMIT = 0;
-
-    const MODE_HOUR = 1;
-
-    const MODE_MINUTE = 10;
-
-    const MODE_SECONDS = 1000;
-
     private int $expires;
 
     private int $price;
 
-    public function __construct(int $price, int $mode, ?int $modifier = null)
+    public function __construct(int $price, int $expires)
     {
-        $this->expires = $this->generateExpiration($mode, $modifier);
+        $this->expires = $expires;
         $this->price = $price;
     }
 
@@ -29,19 +21,6 @@ class CartItem implements \JsonSerializable
         return $this->expires <= time();
     }
 
-    private function generateExpiration(int $mode, ?int $modifier = null): int
-    {
-        switch ($mode) {
-            case self::MODE_NO_LIMIT:
-                return -2;
-            case self::MODE_HOUR:
-                return strtotime('+1 hour');
-            case self::MODE_MINUTE:
-                return strtotime('+' . $modifier . ' minutes');
-            case self::MODE_SECONDS:
-                return strtotime('+' . $modifier . ' seconds');
-        }
-    }
 
     public function getPrice(): int
     {

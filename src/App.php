@@ -11,6 +11,8 @@ use League\Route\Http\Exception\BadRequestException;
 use League\Route\Http\Exception\NotFoundException;
 use League\Route\Router;
 use Planet\InterviewChallenge\Domain\Shop\Controller\IndexController;
+use Planet\InterviewChallenge\Domain\Shop\Service\CartItemExpirationService;
+use Planet\InterviewChallenge\Service\DateTimeFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Smarty\Smarty;
@@ -83,7 +85,16 @@ class App
         self::$router->map(
             'GET',
             '/index.php',
-            fn (ServerRequestInterface $request): ResponseInterface => (new IndexController(self::smarty()))->showCart($request)
+            function (ServerRequestInterface $request): ResponseInterface {
+                return (
+                    new IndexController(
+                        self::smarty(),
+                        new CartItemExpirationService(
+                            new DateTimeFactory()
+                        )
+                    )
+                )->showCart($request);
+            }
         );
     }
 

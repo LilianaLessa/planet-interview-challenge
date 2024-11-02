@@ -12,7 +12,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
 
     public function testGetState()
     {
-        $this->object->addItem(new CartItem(12300, CartItem::MODE_NO_LIMIT));
+        $this->object->addItem(new CartItem(12300, -2));
         $state = $this->object->getState();
 
         $expected = [

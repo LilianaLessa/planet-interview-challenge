@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Planet\InterviewChallenge\Domain\Shop\Controller;
 
 use League\Route\Http\Exception\BadRequestException;
+use Planet\InterviewChallenge\Domain\Shop\Service\CartItemExpirationService;
 use Smarty\Smarty;
 use Planet\InterviewChallenge\Domain\Shop\Cart;
 use Planet\InterviewChallenge\Domain\Shop\CartItem;
@@ -17,10 +18,12 @@ use Laminas\Diactoros\Response;
 class IndexController
 {
     private Smarty $smarty;
+    private CartItemExpirationService $cartItemExpirationService;
 
-    public function __construct(Smarty $smarty)
+    public function __construct(Smarty $smarty, CartItemExpirationService $cartItemExpirationService)
     {
         $this->smarty = $smarty;
+        $this->cartItemExpirationService = $cartItemExpirationService;
     }
 
     public function showCart (ServerRequestInterface $request): ResponseInterface
@@ -37,7 +40,11 @@ class IndexController
         $cart = new Cart();
 
         foreach ($items as $item) {
-            $cart->addItem(new CartItem((int)$item->price, self::valueToMode($item->expires, $modifier), $modifier));
+            $expiration = $this->cartItemExpirationService->generateExpiration(
+                self::valueToMode($item->expires, $modifier),
+                $modifier
+            );
+            $cart->addItem(new CartItem((int)$item->price, $expiration));
         }
 
         $renderer = new SmartyRenderer($this->smarty);
@@ -58,12 +65,12 @@ class IndexController
     private static function valueToMode($value, &$modifier): int {
         if ($value) {
             if ($value === 'never') {
-                return CartItem::MODE_NO_LIMIT;
+                return CartItemExpirationService::MODE_NO_LIMIT;
             }
 
             if ($value === '60min') {
                 $modifier = 60;
-                return CartItem::MODE_SECONDS;
+                return CartItemExpirationService::MODE_SECONDS;
             }
         }
 
