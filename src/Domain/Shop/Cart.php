@@ -2,8 +2,9 @@
 
 namespace Planet\InterviewChallenge\Domain\Shop;
 
-class Cart
+class Cart implements \JsonSerializable
 {
+    /** @var CartItem[] */
     private array $items;
 
     public function __construct()
@@ -23,13 +24,11 @@ class Cart
 
     public function getState(): string
     {
-        $objectStates = '[';
+        return json_encode($this);
+    }
 
-        foreach ($this->items as $item) {
-            $objectStates .= $item->getState() . ',';
-        }
-        $objectStates = substr($objectStates, 0, -1);
-
-        return $objectStates . ']';
+    public function jsonSerialize(): array
+    {
+        return $this->items;
     }
 }

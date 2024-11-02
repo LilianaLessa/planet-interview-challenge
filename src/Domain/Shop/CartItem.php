@@ -2,7 +2,9 @@
 
 namespace Planet\InterviewChallenge\Domain\Shop;
 
-class CartItem
+use stdClass;
+
+class CartItem implements \JsonSerializable
 {
     const MODE_NO_LIMIT = 0;
 
@@ -27,23 +29,6 @@ class CartItem
         return $this->expires <= time();
     }
 
-   /**
-    * Returns the state representation of the object.
-    *
-    * @param int $format Constant from the class CartItem
-    * @return string|object State representation of the class.
-    */
-    public function getState(): string
-    {
-        return json_encode(
-            [
-                "price" => $this->price,
-                "expires" => $this->expires,
-            ],
-            JSON_FORCE_OBJECT
-        );
-    }
-
     private function generateExpiration(int $mode, ?int $modifier = null): int
     {
         switch ($mode) {
@@ -66,5 +51,25 @@ class CartItem
     public function getExpires(): int
     {
         return $this->expires;
+    }
+
+    /**
+     * Returns the state representation of the object.
+     *
+     * @param int $format Constant from the class CartItem
+     * @return string|object State representation of the class.
+     */
+    public function getState(): string
+    {
+        return json_encode($this);
+    }
+
+    public function jsonSerialize(): object
+    {
+        $state = new StdClass();
+        $state->price = $this->price;
+        $state->expires = $this->expires;
+
+        return $state;
     }
 }
