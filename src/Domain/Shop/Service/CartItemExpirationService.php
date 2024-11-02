@@ -27,6 +27,9 @@ class CartItemExpirationService
         $this->dateTimeFactory = $dateTimeFactory;
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     public function generateExpiration(int $mode, ?int $modifier = null): int
     {
         $now = $this->dateTimeFactory->now();
@@ -40,7 +43,8 @@ class CartItemExpirationService
                 return $now->modify(sprintf('+%d minutes', $modifier))->getTimestamp();
             case self::MODE_SECONDS:
                 return $now->modify(sprintf('+%d seconds', $modifier))->getTimestamp();
-            //todo handle invalid mode.
+            default:
+                throw new \InvalidArgumentException(sprintf('Invalid mode: %d', $mode));
         }
     }
 

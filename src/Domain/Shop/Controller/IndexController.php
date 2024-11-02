@@ -26,10 +26,12 @@ class IndexController
         $this->cartItemExpirationService = $cartItemExpirationService;
     }
 
+    /**
+     * @throws BadRequestException
+     */
     public function showCart (ServerRequestInterface $request): ResponseInterface
     {
         $params = $request->getQueryParams();
-
 
         $items = json_decode($params['items'] ?? '[]');
 
@@ -62,18 +64,19 @@ class IndexController
         return $response;
     }
 
+    /**
+     * @throws BadRequestException
+     */
     private static function valueToMode($value, &$modifier): int {
-        if ($value) {
-            if ($value === 'never') {
-                return CartItemExpirationService::MODE_NO_LIMIT;
-            }
 
-            if ($value === '60min') {
+        switch ($value) {
+            case 'never':
+                return CartItemExpirationService::MODE_NO_LIMIT;
+            case '60min':
                 $modifier = 60;
                 return CartItemExpirationService::MODE_SECONDS;
-            }
+            default:
+                throw new BadRequestException('Invalid expiration');
         }
-
-        //todo bad request exception if the value passed is invalid.
     }
 }
