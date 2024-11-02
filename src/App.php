@@ -1,31 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Planet\InterviewChallenge;
 
-use Planet\InterviewChallenge\Domain\Shop\Cart;
-use Planet\InterviewChallenge\Domain\Shop\CartItem;
-use Planet\InterviewChallenge\Domain\Shop\Decorator\Smarty\CartSmartyDecorator;
-use Planet\InterviewChallenge\Infrastructure\SmartyRenderer;
+use Laminas\Diactoros\Response;
+use Laminas\Diactoros\ServerRequestFactory;
+use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
+use League\Route\Http\Exception\BadRequestException;
+use League\Route\Http\Exception\NotFoundException;
+use League\Route\Router;
+use Planet\InterviewChallenge\Domain\Shop\Controller\IndexController;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Smarty\Smarty;
 
 class App
 {
     private static ?Smarty $smarty = null;
-
-    public static function smarty(): Smarty
-    {
-        if(self::$smarty === null) {
-            self::initSmarty();
-        }
-
-        return self::$smarty;
-    }
+    private static ?Router $router = null;
 
     public static function run(): void
     {
         self::initSmarty();
 
-        self::processIndex();
+        self::processRequest();
     }
 
     private static function initSmarty(): void
@@ -41,40 +40,75 @@ class App
         });
     }
 
-    private static function processIndex(): void
+    private static function processRequest(): void
     {
-        $params = json_decode($_GET['items'] ?? '[]');
-
-        $cart = new Cart();
-
-        foreach ($params as $item) {
-            $cart->addItem(new CartItem((int)$item->price, self::valueToMode($item->expires, $modifier), $modifier));
-        }
-
-        $renderer = new SmartyRenderer(self::$smarty);
-
-        $content = $renderer->render(
-            'App.tpl',
-            [
-                'ShopCart' => new CartSmartyDecorator(self::smarty(), $cart),
-            ]
+        $request = ServerRequestFactory::fromGlobals(
+            $_SERVER, $_GET, $_POST, $_COOKIE, $_FILES
         );
 
-        echo $content;
-    }
+        try {
+            $response = self::router()->dispatch($request);
 
-    private static function valueToMode($value, &$modifier): int {
-        if ($value) {
-            if ($value === 'never') {
-                return CartItem::MODE_NO_LIMIT;
-            }
-
-            if ($value === '60min') {
-                $modifier = 60;
-                return CartItem::MODE_SECONDS;
-            }
+        } catch (NotFoundException $e) {
+            $response = self::handleNotFoundException();
+        } catch (BadRequestException $e) {
+            $response = self::handleBadRequestException($e->getMessage());
         }
 
-        //todo bad request exception if the value passed is invalid.
+        (new SapiEmitter)->emit($response);
+    }
+
+    private static function smarty(): Smarty
+    {
+        if(self::$smarty === null) {
+            self::initSmarty();
+        }
+
+        return self::$smarty;
+    }
+
+    private static function router(): Router
+    {
+        if(self::$router === null) {
+            self::initRouter();
+        }
+
+        return self::$router;
+    }
+
+    private static function initRouter(): void
+    {
+        self::$router = new Router();
+
+        self::$router->map(
+            'GET',
+            '/index.php',
+            fn (ServerRequestInterface $request): ResponseInterface => (new IndexController(self::smarty()))->showCart($request)
+        );
+    }
+
+    private static function handleNotFoundException(): Response
+    {
+        ob_start();
+        self::smarty()->display('404.tpl');
+        $content = ob_get_contents();
+        ob_end_clean();
+
+        $response = new Response();
+        $response->getBody()->write($content);
+        return $response;
+    }
+
+    private static function handleBadRequestException(string $message): Response
+    {
+        ob_start();
+        self::smarty()->assign('message', $message);
+        self::smarty()->display('400.tpl');
+        $content = ob_get_contents();
+        ob_end_clean();
+
+        $response = new Response();
+        $response->getBody()->write($content);
+        return $response;
     }
 }

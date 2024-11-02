@@ -12,7 +12,10 @@
         "mustangostang/spyc": "^0.6.3",
         "smarty/smarty": "^5.4",
         "wp-pay-gateways/abnamro-internetkassa": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "league/route": "^5.1",
+        "laminas/laminas-diactoros": "^2.17",
+        "laminas/laminas-httphandlerrunner": "^2.2"
     },
     "license": "MIT",
     "autoload": {
