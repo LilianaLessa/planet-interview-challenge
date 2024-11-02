@@ -1,6 +1,6 @@
 <?php
 
-use Planet\InterviewChallenge\Shop\CartItem;
+use Planet\InterviewChallenge\Domain\Shop\CartItem;
 
 class CartItemTest extends \PHPUnit\Framework\TestCase
 {

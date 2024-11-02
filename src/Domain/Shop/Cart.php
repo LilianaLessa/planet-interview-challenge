@@ -1,6 +1,6 @@
 <?php
 
-namespace Planet\InterviewChallenge\Shop;
+namespace Planet\InterviewChallenge\Domain\Shop;
 
 use Planet\InterviewChallenge\App;
 
@@ -11,12 +11,6 @@ class Cart
     public function __construct()
     {
         $this->items = [];
-
-        $params = json_decode($_GET['items'] ?? '[]');
-
-        foreach ($params as $item) {
-            $this->addItem(new CartItem((int)$item->price, $this->valueToMode($item->expires, $modifier), $modifier));
-        }
     }
 
     public function addItem(CartItem $cartItem): void
@@ -39,19 +33,5 @@ class Cart
         }
         $objectStates = substr($objectStates, 0, -1);
         return $objectStates . ']';
-    }
-
-    private function valueToMode($value, &$modifier): int {
-
-        if ($value) {
-            if ($value === 'never') {
-                return CartItem::MODE_NO_LIMIT;
-            }
-
-            if ($value === '60min') {
-                $modifier = 60;
-                return CartItem::MODE_SECONDS;
-            }
-        }
     }
 }

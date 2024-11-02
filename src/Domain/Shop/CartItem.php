@@ -1,6 +1,6 @@
 <?php
 
-namespace Planet\InterviewChallenge\Shop;
+namespace Planet\InterviewChallenge\Domain\Shop;
 
 use Planet\InterviewChallenge\App;
 
