@@ -17,7 +17,8 @@
         "laminas/laminas-diactoros": "^2.17",
         "laminas/laminas-httphandlerrunner": "^2.2",
         "monolog/monolog": "^2.9",
-        "ramsey/uuid": "^4.2"
+        "ramsey/uuid": "^4.2",
+        "php-di/php-di": "^6.4"
     },
     "license": "MIT",
     "autoload": {

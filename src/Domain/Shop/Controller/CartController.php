@@ -6,6 +6,7 @@ namespace Planet\InterviewChallenge\Domain\Shop\Controller;
 
 use League\Route\Http\Exception\BadRequestException;
 use Planet\InterviewChallenge\Domain\Shop\Service\CartItemExpirationService;
+use Planet\InterviewChallenge\Service\SmartyTemplateService;
 use Smarty\Smarty;
 use Planet\InterviewChallenge\Domain\Shop\Cart;
 use Planet\InterviewChallenge\Domain\Shop\CartItem;
@@ -15,21 +16,23 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Laminas\Diactoros\Response;
 
-class IndexController
+class CartController
 {
     private Smarty $smarty;
     private CartItemExpirationService $cartItemExpirationService;
 
-    public function __construct(Smarty $smarty, CartItemExpirationService $cartItemExpirationService)
-    {
-        $this->smarty = $smarty;
+    public function __construct(
+        SmartyTemplateService $smartyTemplateService,
+        CartItemExpirationService $cartItemExpirationService
+    ) {
+        $this->smarty = $smartyTemplateService->getSmarty();
         $this->cartItemExpirationService = $cartItemExpirationService;
     }
 
     /**
      * @throws BadRequestException
      */
-    public function showCart (ServerRequestInterface $request): ResponseInterface
+    public function showCart(ServerRequestInterface $request): ResponseInterface
     {
         $params = $request->getQueryParams();
 
