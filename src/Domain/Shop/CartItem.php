@@ -2,8 +2,6 @@
 
 namespace Planet\InterviewChallenge\Domain\Shop;
 
-use Planet\InterviewChallenge\App;
-
 class CartItem
 {
     const MODE_NO_LIMIT = 0;
@@ -46,14 +44,6 @@ class CartItem
         );
     }
 
-    public function display(): string
-    {
-        App::smarty()->assign('price', $this->price);
-        App::smarty()->assign('expires', $this->expires);
-
-        return App::smarty()->fetch('shop/CartItem.tpl');
-    }
-
     private function generateExpiration(int $mode, ?int $modifier = null): int
     {
         switch ($mode) {
@@ -66,5 +56,15 @@ class CartItem
             case self::MODE_SECONDS:
                 return strtotime('+' . $modifier . ' seconds');
         }
+    }
+
+    public function getPrice(): int
+    {
+        return $this->price;
+    }
+
+    public function getExpires(): int
+    {
+        return $this->expires;
     }
 }

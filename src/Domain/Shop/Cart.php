@@ -2,8 +2,6 @@
 
 namespace Planet\InterviewChallenge\Domain\Shop;
 
-use Planet\InterviewChallenge\App;
-
 class Cart
 {
     private array $items;
@@ -18,20 +16,20 @@ class Cart
         $this->items[] = $cartItem;
     }
 
-    public function display(): string
+    public function getItems(): array
     {
-        App::smarty()->assign('items', $this->items);
-        return App::smarty()->fetch('shop/Cart.tpl');
+        return $this->items;
     }
 
     public function getState(): string
     {
         $objectStates = '[';
 
-        while ($item = each($this->items)) {
-            $objectStates .= $item['value']->getState() . ',';
+        foreach ($this->items as $item) {
+            $objectStates .= $item->getState() . ',';
         }
         $objectStates = substr($objectStates, 0, -1);
+
         return $objectStates . ']';
     }
 }

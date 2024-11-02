@@ -4,6 +4,7 @@ namespace Planet\InterviewChallenge;
 
 use Planet\InterviewChallenge\Domain\Shop\Cart;
 use Planet\InterviewChallenge\Domain\Shop\CartItem;
+use Planet\InterviewChallenge\Domain\Shop\Decorator\Smarty\CartSmartyDecorator;
 use Planet\InterviewChallenge\Infrastructure\SmartyRenderer;
 use Smarty\Smarty;
 
@@ -55,7 +56,7 @@ class App
         $content = $renderer->render(
             'App.tpl',
             [
-                'ShopCart' => $cart,
+                'ShopCart' => new CartSmartyDecorator(self::smarty(), $cart),
             ]
         );
 
