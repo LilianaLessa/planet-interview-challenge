@@ -25,6 +25,6 @@ class CartSmartyDecorator
         );
 
         $this->smarty->assign('items', $decoratedItems);
-        return $this->smarty->fetch('Shop/Cart.tpl');
+        return $this->smarty->fetch('Domain/Shop/Cart.tpl');
     }
 }

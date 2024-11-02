@@ -38,7 +38,7 @@ class ApplicationLogger
         ob_start();
         try {
             $smarty->assign('locator', $locator);
-            $smarty->display('500.tpl');
+            $smarty->display('ErrorPages/500.tpl');
             $content = ob_get_contents();
         } catch (Throwable $e) {
             self::logException($e, $locator);
@@ -59,6 +59,6 @@ class ApplicationLogger
     private  function initLogger(): void
     {
         $this->logger = new Logger('application');
-        $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../log/error.log'));
+        $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../../log/error.log'));
     }
 }

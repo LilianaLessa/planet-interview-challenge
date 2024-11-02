@@ -65,7 +65,7 @@ class RouteHandler
         $smarty = $this->smartyTemplateService->getSmarty();
 
         ob_start();
-        $smarty->display('404.tpl');
+        $smarty->display('ErrorPages/404.tpl');
         $content = ob_get_contents();
         ob_end_clean();
 
@@ -80,7 +80,7 @@ class RouteHandler
 
         ob_start();
         $smarty->assign('message', $message);
-        $smarty->display('400.tpl');
+        $smarty->display('ErrorPages/400.tpl');
         $content = ob_get_contents();
         ob_end_clean();
 

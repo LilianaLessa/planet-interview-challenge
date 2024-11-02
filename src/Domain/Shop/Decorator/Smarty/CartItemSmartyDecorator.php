@@ -22,6 +22,6 @@ class CartItemSmartyDecorator
         $this->smarty->assign('price', $this->cartItem->getPrice());
         $this->smarty->assign('expires', $this->cartItem->getExpires());
 
-        return $this->smarty->fetch('Shop/CartItem.tpl');
+        return $this->smarty->fetch('Domain/Shop/CartItem.tpl');
     }
 }
