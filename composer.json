@@ -4,14 +4,7 @@
     "type": "project",
     "require": {
         "php": "^7.4",
-        "codeception/codeception": "^4.2",
-        "codeception/module-asserts": "^2.0",
-        "codeception/module-db": "^2.1",
-        "codeception/module-rest": "^2.0",
-        "codeception/module-phpbrowser": "^2.0",
-        "mustangostang/spyc": "^0.6.3",
         "smarty/smarty": "^5.4",
-        "wp-pay-gateways/abnamro-internetkassa": "*",
         "ext-json": "*",
         "league/route": "^5.1",
         "laminas/laminas-diactoros": "^2.17",
@@ -19,6 +12,12 @@
         "monolog/monolog": "^2.9",
         "ramsey/uuid": "^4.2",
         "php-di/php-di": "^6.4"
+    },
+    "require-dev": {
+        "codeception/codeception": "^4.2",
+        "codeception/module-asserts": "^2.0",
+        "codeception/module-rest": "^2.0",
+        "codeception/module-phpbrowser": "^2.0"
     },
     "license": "MIT",
     "autoload": {
@@ -30,6 +29,10 @@
         {
             "name": "Arttu Salonen",
             "email": "arttu.salonen@wearegroup.com"
+        },
+        {
+            "name": "Liliana Lessa",
+            "email": "liliana.lessa1@gmail.com"
         }
     ]
 }
