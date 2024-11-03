@@ -1,37 +1,49 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Planet\InterviewChallenge;
 
-use Smarty\Smarty;
+use DI\Container;
+use Laminas\Diactoros\ServerRequestFactory;
+use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
+use Planet\InterviewChallenge\Infrastructure\ApplicationLogger;
+use Planet\InterviewChallenge\Infrastructure\RouteHandler;
+use Throwable;
 
 class App
 {
-    public static Smarty $smarty;
-
-    public static function smarty(): Smarty
-    {
-        return self::$smarty;
-    }
+    private static ?Container $container = null;
 
     public static function run(): void
     {
-        // init
-        self::$smarty = new Smarty();
-        self::$smarty->setTemplateDir([__DIR__, __DIR__.'/tpl']);
-        self::$smarty->setConfigDir(__DIR__.'/config');
-        self::$smarty->setCompileDir(__DIR__.'/../tmp/templates_c');
-        self::$smarty->setCacheDir(__DIR__.'/../tmp/cache');
+        try {
+            $request = ServerRequestFactory::fromGlobals(
+                $_SERVER,
+                $_GET,
+                $_POST,
+                $_COOKIE,
+                $_FILES
+            );
 
-        self::$smarty->registerPlugin('modifier', 'format_date', function($timestamp, $format = 'Y-m-d'){
-            return date($format, $timestamp);
-        });
+            /** @var RouteHandler $routeHandler */
+            $routeHandler = self::container()->get(RouteHandler::class);
+            $response = $routeHandler->processRequest($request);
+        } catch (Throwable $e) {
+            /** @var ApplicationLogger $applicationLogger */
+            $applicationLogger = self::container()->get(ApplicationLogger::class);
+            $response = $applicationLogger->handleGenericException($e);
+        }
 
-        // run
-        ob_start();
-        self::$smarty->assign('ShopCart', new \Planet\InterviewChallenge\Shop\Cart());
-        self::$smarty->display('App.tpl');
-        $render = ob_get_contents();
-        ob_end_clean();
-        print $render;
+        (new SapiEmitter())->emit($response);
+    }
+
+    private static function container(): Container
+    {
+        if (null === self::$container) {
+            self::$container = new Container();
+        }
+
+        return self::$container;
     }
 }
