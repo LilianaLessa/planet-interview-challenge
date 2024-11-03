@@ -59,7 +59,10 @@ If you want to run unit or functional tests separately, these are the commands:
   - https://phpstan.org/user-guide/getting-started
 - GitHub workflows
   - https://docs.github.com/en/actions/writing-workflows
-  - Old projects
+  - Old project as reference
+- HTML details
+  - https://web.dev/articles/add-manifest
+  - https://ogp.me
 
 Most of the code was written from scratch, except for the basic usage of the 
 **Route Handler**, **Dependency Injection** and **Logging** concepts 

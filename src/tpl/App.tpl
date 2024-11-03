@@ -1,32 +1,30 @@
 <!doctype html>
-<html class="no-js" lang="">
+<html class="no-js" lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
-  <link rel="stylesheet" href="css/style.css">
-  <meta name="description" content="">
+  <title>Cart</title>
 
-  <meta property="og:title" content="">
-  <meta property="og:type" content="">
-  <meta property="og:url" content="">
-  <meta property="og:image" content="">
-  <meta property="og:image:alt" content="">
+  <meta charset="utf-8" />
 
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" href="/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Planet interview challenge answer by Liliana Lessa" />
+  <meta name="theme-color" content="#fafafa" />
 
-  <link rel="manifest" href="site.webmanifest">
-  <meta name="theme-color" content="#fafafa">
+  <meta property="og:title" content="Cart" />
+  <meta property="og:type" content="website" />
+  <meta property="og:description" content="Planet interview challenge answer by Liliana Lessa" />
+  <meta property="og:url" content="" />
+  <meta property="og:image" content="" />
+  <meta property="og:image:alt" content="" />
+
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
 </head>
 
 <body>
-
   {$ShopCart->display()}
-  <script src="js/app.js"></script>
-
 </body>
 
 </html>
