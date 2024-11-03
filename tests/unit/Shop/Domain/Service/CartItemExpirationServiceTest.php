@@ -9,6 +9,15 @@ use Planet\InterviewChallenge\Service\DateTimeFactory;
 
 class CartItemExpirationServiceTest extends TestCase
 {
+    private CartItemExpirationService $subject;
+    private DateTimeFactory $dateTimeFactoryMock;
+    
+    protected function tearDown(): void
+    {
+        unset($this->subject);
+        unset($this->dateTimeFactoryMock);
+    }
+    
     /**
      * @dataProvider generateExpirationDataProvider
      */
@@ -19,16 +28,16 @@ class CartItemExpirationServiceTest extends TestCase
         int $expectedOutput
     ): void {
 
-        $dateTimeFactoryMock = $this->getMockBuilder(DateTimeFactory::class)
+        $this->dateTimeFactoryMock = $this->getMockBuilder(DateTimeFactory::class)
             ->getMock();
 
-        $dateTimeFactoryMock
+        $this->dateTimeFactoryMock
             ->method('now')
             ->willReturn((new DateTimeImmutable())->setTimestamp($baseTimestamp));
 
-        $subject = new CartItemExpirationService($dateTimeFactoryMock);
+        $this->subject = new CartItemExpirationService($this->dateTimeFactoryMock);
 
-        $output = $subject->generateExpiration($mode, $modifier);
+        $output = $this->subject->generateExpiration($mode, $modifier);
 
         $this->assertEquals($expectedOutput, $output);
     }
@@ -79,12 +88,12 @@ class CartItemExpirationServiceTest extends TestCase
 
     public function testGenerateExpirationFailOnInvalidMode(): void
     {
-        $subject = new CartItemExpirationService(new DateTimeFactory());
+        $this->subject = new CartItemExpirationService(new DateTimeFactory());
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid mode: -1');
 
-        $subject->generateExpiration(-1);
+        $this->subject->generateExpiration(-1);
     }
 
     /**
@@ -98,17 +107,17 @@ class CartItemExpirationServiceTest extends TestCase
     ): void {
         $now = new DateTimeImmutable();
 
-        $dateTimeFactoryMock = $this->getMockBuilder(DateTimeFactory::class)
+        $this->dateTimeFactoryMock = $this->getMockBuilder(DateTimeFactory::class)
             ->getMock();
 
-        $dateTimeFactoryNowMock = $dateTimeFactoryMock->method('now');
+        $dateTimeFactoryNowMock = $this->dateTimeFactoryMock->method('now');
         $dateTimeFactoryNowMock->willReturn($now);
 
         $mode = $modifier ? CartItemExpirationService::MODE_SECONDS : CartItemExpirationService::MODE_NO_LIMIT;
 
-        $subject = new CartItemExpirationService($dateTimeFactoryMock);
+        $this->subject = new CartItemExpirationService($this->dateTimeFactoryMock);
 
-        $expiration = $subject->generateExpiration($mode, $modifier);
+        $expiration = $this->subject->generateExpiration($mode, $modifier);
 
         $cartItem = new CartItem(123, $expiration);
 
@@ -120,9 +129,11 @@ class CartItemExpirationServiceTest extends TestCase
             $now = $now->modify(sprintf('+%d seconds', $increment));
             $dateTimeFactoryNowMock->willReturn($now);
 
-            $result = $subject->isAvailable($cartItem);
+            $result = $this->subject->isAvailable($cartItem);
             $this->assertEquals($expectedResult, $result);
         }
+        
+        unset($now);
     }
 
     public function isAvailableDataProvider(): array
