@@ -8,7 +8,7 @@ use Planet\InterviewChallenge\Domain\Shop\CartItem;
 
 class CartTest extends TestCase
 {
-    private ?Cart $object;
+    private Cart $object;
 
     public function setUp(): void
     {
@@ -18,7 +18,6 @@ class CartTest extends TestCase
     public function tearrDown(): void
     {
         unset($this->object);
-        $this->object = null;
     }
 
     public function testGetState(): void

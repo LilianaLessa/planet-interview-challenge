@@ -9,16 +9,13 @@ use Planet\InterviewChallenge\Service\DateTimeFactory;
 
 class CartItemTest extends TestCase
 {
-    protected ?CartItemExpirationService $cartItemExpirationService;
-    protected ?DateTimeFactory $dateTimeFactory;
+    protected CartItemExpirationService $cartItemExpirationService;
+    protected DateTimeFactory $dateTimeFactory;
 
     public function tearDown(): void
     {
         unset($this->cartItemExpirationService);
-        $this->cartItemExpirationService = null;
-
         unset($this->dateTimeFactory);
-        $this->dateTimeFactory = null;
     }
 
     public function testIsAvailable(): void
