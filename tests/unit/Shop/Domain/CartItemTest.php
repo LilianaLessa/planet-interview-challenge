@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use PHPUnit\Framework\TestCase;
 use Planet\InterviewChallenge\Domain\Shop\CartItem;
 use Planet\InterviewChallenge\Domain\Shop\Service\CartItemExpirationService;
@@ -62,5 +64,31 @@ class CartItemTest extends TestCase
         $now = $now->modify('+30 seconds');
         $dateTimeFactoryNowMock->willReturn($now);
         $this->assertTrue($this->cartItemExpirationService->isAvailable($object));
+    }
+
+    public function testGetState(): void
+    {
+        $object = new CartItem(12300, -2);
+        $state = $object->getState();
+
+        $expected = (object)[
+            'price' => 12300,
+            'expires' => -2,
+        ];
+        $this->assertEquals($expected, json_decode($state));
+    }
+
+    public function testGetPrice(): void
+    {
+        $object = new CartItem(12300, -2);
+
+        $this->assertEquals(12300, $object->getPrice());
+    }
+
+    public function testGetExpires(): void
+    {
+        $object = new CartItem(12300, -2);
+
+        $this->assertEquals(-2, $object->getExpires());
     }
 }

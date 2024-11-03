@@ -1,7 +1,8 @@
 [![PHP-CS](https://github.com/LilianaLessa/planet-interview-challenge/actions/workflows/phpcs.yml/badge.svg)](https://github.com/LilianaLessa/planet-interview-challenge/actions/workflows/phpcs.yml)
 [![PHPStan](https://github.com/LilianaLessa/planet-interview-challenge/actions/workflows/phpstan.yml/badge.svg)](https://github.com/LilianaLessa/planet-interview-challenge/actions/workflows/phpstan.yml)
 [![Tests-Unit](https://github.com/LilianaLessa/planet-interview-challenge/actions/workflows/tests_unit.yml/badge.svg)](https://github.com/LilianaLessa/planet-interview-challenge/actions/workflows/tests_unit.yml)
-
+[![Tests-Functional](https://github.com/LilianaLessa/planet-interview-challenge/actions/workflows/tests_functional.yml/badge.svg)](https://github.com/LilianaLessa/planet-interview-challenge/actions/workflows/tests_functional.yml)
+[![Coverage Status](https://coveralls.io/repos/github/LilianaLessa/planet-interview-challenge/badge.svg?branch=main)](https://coveralls.io/github/LilianaLessa/planet-interview-challenge)
 ## Dependencies
 
 - PHP 7.4
@@ -63,6 +64,9 @@ If you want to run unit or functional tests separately, these are the commands:
 - HTML details
   - https://web.dev/articles/add-manifest
   - https://ogp.me
+- Code Coverage
+  - https://docs.coveralls.io
+  - https://github.com/php-coveralls/php-coveralls?tab=readme-ov-file#github-actions
 
 Most of the code was written from scratch, except for the basic usage of the 
 **Route Handler**, **Dependency Injection** and **Logging** concepts 

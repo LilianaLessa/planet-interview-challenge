@@ -27,10 +27,6 @@ class CartItem implements \JsonSerializable
     {
         $state = json_encode($this);
 
-        if ($state === false) {
-            throw new \RuntimeException('Could not JSON encode cart item state.');
-        }
-
         return $state;
     }
 

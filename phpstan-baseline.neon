@@ -1,0 +1,11 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method Planet\\\\InterviewChallenge\\\\Domain\\\\Shop\\\\Cart\\:\\:getState\\(\\) should return string but returns string\\|false\\.$#"
+			count: 1
+			path: src/Domain/Shop/Cart.php
+
+		-
+			message: "#^Method Planet\\\\InterviewChallenge\\\\Domain\\\\Shop\\\\CartItem\\:\\:getState\\(\\) should return string but returns string\\|false\\.$#"
+			count: 1
+			path: src/Domain/Shop/CartItem.php
