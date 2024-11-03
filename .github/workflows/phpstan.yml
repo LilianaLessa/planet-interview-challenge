@@ -1,0 +1,39 @@
+name: PHPStan
+
+on:
+  pull_request:
+    branches:
+      - main
+
+env:
+  COMPOSER_ALLOW_SUPERUSER: 1
+  COMPOSER_HOME: /composer
+  GITHUB_WORKSPACE: /github/workspace/planet-interview-challenge
+  ENV: dev
+
+jobs:
+  phpstan:
+    runs-on: [ ubuntu-latest ]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Fetch data from git
+        run: |
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+          sudo apt-get install librdkafka-dev -y
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+
+      - name: Install dependencies
+        working-directory: .
+        run: |
+          composer install --prefer-dist --no-progress --no-suggest --ignore-platform-req=ext-gd
+
+      - name: PHPStan
+        run: |
+          vendor/bin/phpstan analyse -l 9 src -vvv
+
+      - uses: AutoModality/action-clean@v1
