@@ -61,7 +61,7 @@ class TemplateService
         $this->smarty = new Smarty();
 
         $this->smarty
-            ->setTemplateDir([ __DIR__ . '/../tpl'])
+            ->setTemplateDir([ __DIR__ . '/../Template'])
             ->setCompileDir(__DIR__ . '/../../tmp/templates_c')
             ->setCacheDir(__DIR__ . '/../../tmp/cache');
 
