@@ -1,4 +1,4 @@
-name: PHPStan
+name: Tests-Unit
 
 on:
   pull_request:
@@ -12,7 +12,7 @@ env:
   ENV: dev
 
 jobs:
-  phpstan:
+  tests-unit:
     runs-on: [ ubuntu-latest ]
     steps:
       - uses: actions/checkout@v3
@@ -31,8 +31,12 @@ jobs:
         run: |
           composer install --prefer-dist --no-progress --no-suggest --ignore-platform-req=ext-gd
 
-      - name: PHPStan
+      - name: Build Tests
         run: |
-          vendor/bin/phpstan analyse -l 9 src -vvv
+          vendor/bin/codecept build
+
+      - name: Unit Tests
+        run: |
+          vendor/bin/codecept run unit --steps
 
       - uses: AutoModality/action-clean@v1
