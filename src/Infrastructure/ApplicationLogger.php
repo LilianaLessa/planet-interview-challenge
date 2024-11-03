@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Planet\InterviewChallenge\Infrastructure;
 
+use Google\Cloud\Logging\LoggingClient;
 use Laminas\Diactoros\Response;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Planet\InterviewChallenge\Service\TemplateService;
+use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use Throwable;
 
 class ApplicationLogger
 {
-    private Logger $logger;
+    private LoggerInterface $logger;
 
     private TemplateService $templateService;
 
@@ -53,10 +55,13 @@ class ApplicationLogger
     private function logException(Throwable $exception, string $locator): void
     {
         $this->logger->error(
-            '',
+            $exception->getMessage(),
             [
                 'locator' => $locator,
                 'message' => $exception->getMessage(),
+                'exception' => get_class($exception),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
                 'trace' => $exception->getTrace()
             ]
         );
@@ -64,7 +69,20 @@ class ApplicationLogger
 
     private function initLogger(): void
     {
+        if (getenv('ENVIRONMENT') === 'gcp') {
+            $this->initGCPLogger();
+            return;
+        }
+
         $this->logger = new Logger('application');
         $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../../log/error.log'));
+    }
+
+    private function initGCPLogger(): void
+    {
+        $logging = new LoggingClient([
+            'projectId' => getenv('GOOGLE_CLOUD_PROJECT')
+        ]);
+        $this->logger = $logging->psrLogger('app');
     }
 }

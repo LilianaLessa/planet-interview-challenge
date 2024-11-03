@@ -1,0 +1,41 @@
+name: Deploy to GAE
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploying to Google Cloud
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Auth
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT }}
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Deploy to App Engine
+        id: deploy
+        uses: google-github-actions/deploy-appengine@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT }}
+          env_vars: |
+            GOOGLE_CLOUD_PROJECT=${{ secrets.GCP_PROJECT }}
+            ENVIRONMENT=gcp
+            GCP_KEY_FILE_BASE_64=${{ secrets.GCP_CREDENTIALS_BASE_64 }}
+
+      - name: Test
+        run: curl "${{ steps.deploy.outputs.url }}"
