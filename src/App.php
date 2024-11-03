@@ -38,7 +38,7 @@ class App
         (new SapiEmitter())->emit($response);
     }
 
-    public static function container(): Container
+    private static function container(): Container
     {
         if (null === self::$container) {
             self::$container = new Container();
