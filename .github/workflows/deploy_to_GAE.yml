@@ -1,13 +1,12 @@
 name: Deploy to GAE
 
 on:
-  pull_request:
-    branches:
-      - main
-  push:
-    branches:
-      - main
-
+  workflow_call:
+    secrets:
+      GCP_PROJECT:
+        required: true
+      GCP_CREDENTIALS:
+        required: true
 jobs:
   deploy:
     name: Deploying to Google Cloud
@@ -35,7 +34,6 @@ jobs:
           env_vars: |
             GOOGLE_CLOUD_PROJECT=${{ secrets.GCP_PROJECT }}
             ENVIRONMENT=gcp
-            GCP_KEY_FILE_BASE_64=${{ secrets.GCP_CREDENTIALS_BASE_64 }}
 
       - name: Test
         run: curl "${{ steps.deploy.outputs.url }}"

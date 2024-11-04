@@ -7,6 +7,10 @@ on:
   push:
     branches:
       - main
+  workflow_call:
+    secrets:
+      COVERALLS_REPO_TOKEN:
+        required: true
 
 env:
   COMPOSER_ALLOW_SUPERUSER: 1
@@ -44,6 +48,7 @@ jobs:
           XDEBUG_MODE=coverage php vendor/bin/codecept run unit --steps --coverage-xml
 
       - name: Upload coverage results to Coveralls
+        if: inputs.skip_coverage_upload == false
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: |          
