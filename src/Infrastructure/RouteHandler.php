@@ -45,12 +45,20 @@ class RouteHandler
     {
         $this->router = new Router();
 
+        $cartIndexHandler = function (ServerRequestInterface $request): Response {
+            return $this->cartController->showCart($request);
+        };
+
         $this->router->map(
             'GET',
             '/index.php',
-            function (ServerRequestInterface $request): Response {
-                return $this->cartController->showCart($request);
-            }
+            $cartIndexHandler
+        );
+
+        $this->router->map(
+            'GET',
+            '/',
+            $cartIndexHandler
         );
     }
 

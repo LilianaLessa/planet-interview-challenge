@@ -3,7 +3,7 @@
     "description": "A programming challenge for potential recruits for the Gift Card Manager and Booking Engine projects.",
     "type": "project",
     "require": {
-        "php": "^7.4",
+        "php": "^7.4|^8.1",
         "smarty/smarty": "^5.4",
         "ext-json": "*",
         "league/route": "^5.1",
@@ -11,7 +11,8 @@
         "laminas/laminas-httphandlerrunner": "^2.2",
         "monolog/monolog": "^2.9",
         "ramsey/uuid": "^4.2",
-        "php-di/php-di": "^6.4"
+        "php-di/php-di": "^6.4",
+        "google/cloud-logging": "^1.29"
     },
     "require-dev": {
         "codeception/codeception": "^4.2",

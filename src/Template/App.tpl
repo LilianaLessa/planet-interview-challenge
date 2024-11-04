@@ -21,10 +21,22 @@
   <link rel="icon" href="icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="icon.png" />
   <link rel="manifest" href="site.webmanifest" />
+
+  <style>
+    span.appVersion {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      color: #aaa;
+    }
+  </style>
 </head>
 
 <body>
   {$ShopCart->display()}
+  <footer>
+    <span class="appVersion">App version: {$AppVersion}</span>
+  </footer>
 </body>
 
 </html>

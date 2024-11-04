@@ -63,10 +63,18 @@ class TemplateService
         $this->smarty
             ->setTemplateDir([ __DIR__ . '/../Template'])
             ->setCompileDir(__DIR__ . '/../../tmp/templates_c')
-            ->setCacheDir(__DIR__ . '/../../tmp/cache');
+            ->setCacheDir(__DIR__ . '/../../tmp/cache')
+        ;
 
         $this->smarty->registerPlugin('modifier', 'format_date', function ($timestamp, $format = 'Y-m-d') {
             return date($format, $timestamp);
         });
+
+        if (getenv('ENVIRONMENT') === 'gcp') {
+            $this->smarty
+                ->setCompileDir('/tmp/smarty/tmp/templates_c')
+                ->setCacheDir('/tmp/smarty/tmp/cache')
+                ;
+        }
     }
 }
