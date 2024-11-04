@@ -93,7 +93,3 @@ Most of the code was written from scratch, except for the basic usage of the
 **Route Handler**, **Dependency Injection** and **Logging** concepts 
 and the templates for the error pages, which were copied from 
 the **public/404.html** originally present on the repository. 
-
-## Original README.md
-
-Can be found [here](README_original.md).
