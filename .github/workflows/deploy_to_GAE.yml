@@ -7,6 +7,10 @@ on:
         required: true
       GCP_CREDENTIALS:
         required: true
+    inputs:
+      APP_VERSION:
+        type: string
+        required: true
 jobs:
   deploy:
     name: Deploying to Google Cloud
@@ -34,6 +38,7 @@ jobs:
           env_vars: |
             GOOGLE_CLOUD_PROJECT=${{ secrets.GCP_PROJECT }}
             ENVIRONMENT=gcp
+            APP_VERSION=${{ inputs.APP_VERSION }}
 
       - name: Test
         run: curl "${{ steps.deploy.outputs.url }}"

@@ -52,10 +52,14 @@ class CartController
             $cart->addItem(new CartItem((int)$item->price, $expiration));
         }
 
+        $appVersion = getenv('APP_VERSION');
+        $appVersion = $appVersion !== false ? $appVersion : 'dev';
+
         $content = $this->templateService->render(
             'App.tpl',
             [
                 'ShopCart' => new CartTemplateDecorator($this->templateService, $cart),
+                'AppVersion' => $appVersion,
             ]
         );
 
