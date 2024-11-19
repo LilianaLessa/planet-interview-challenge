@@ -7,6 +7,10 @@ on:
   push:
     branches:
       - main
+  workflow_call:
+    secrets:
+      COVERALLS_REPO_TOKEN:
+        required: true
 
 env:
   COMPOSER_ALLOW_SUPERUSER: 1
